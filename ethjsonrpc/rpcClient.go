@@ -2,7 +2,6 @@ package ethjsonrpc
 
 import (
 	"context"
-	"fmt"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -73,12 +72,8 @@ func (ec *Client) GetBlockByHash(ctx context.Context, hash common.Hash) (*types.
 
 func (ec *Client) GetTransactionByHash(ctx context.Context, hash common.Hash) (*types.Transaction, bool, error) {
 	return ec.ethClient.TransactionByHash(ctx, hash)
-	// var result types.Transaction
-	// err := ec.rpcClient.CallContext(ctx, &result, "eth_getTransactionByHash", hash)
-	// return (*types.Transaction)(&result), err
 }
 
 func (ec *Client) GetTransactionRecept(ctx context.Context, hash common.Hash) (*types.Receipt, error) {
-	fmt.Printf("hash=%v\n", hash)
 	return ec.ethClient.TransactionReceipt(ctx, hash)
 }
