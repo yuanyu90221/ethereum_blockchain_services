@@ -12,6 +12,7 @@ import (
 func IndexService(ctx context.Context, rpcClient *ethjsonrpc.Client) {
 	jobChan := make(chan int64, 10)
 	initIdx := int64(configs.GetEnvConfig().INIT_INDEX)
+	defer close(jobChan)
 	go worker(ctx, jobChan, rpcClient)
 	for {
 		// get current block Number
