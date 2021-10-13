@@ -41,4 +41,5 @@ func Process(job int64, rpcClient *ethjsonrpc.Client, ctx context.Context) {
 		log.Fatal(err)
 	}
 	log.Printf("%v\n", blockData)
+	// TODO: add UPSERT DATABASE logic
 }
