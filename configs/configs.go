@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	INIT_INDEX          int
 	PORT                int
 	POSTGRES_PORT       int
 	POSTGRES_USER       string
@@ -29,6 +30,11 @@ func LoadConfig() {
 	EnvConfig.APP_NAME = os.Getenv("APP_NAME")
 	EnvConfig.PORT = 5566
 	EnvConfig.POSTGRES_PORT = 5432
+	EnvConfig.INIT_INDEX = 10000
+	INIT_INDEX, error := strconv.Atoi("INIT_INDEX")
+	if error == nil {
+		EnvConfig.INIT_INDEX = INIT_INDEX
+	}
 	PORT, error := strconv.Atoi(os.Getenv("PORT"))
 	if error == nil {
 		EnvConfig.PORT = PORT

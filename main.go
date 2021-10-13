@@ -14,12 +14,13 @@ import (
 	"github.com/yuanyu90221/ethereum_blockchain_services/configs"
 	"github.com/yuanyu90221/ethereum_blockchain_services/ethjsonrpc"
 	"github.com/yuanyu90221/ethereum_blockchain_services/router"
+	"github.com/yuanyu90221/ethereum_blockchain_services/services"
 )
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	config := configs.GetEnvConfig()
-	rpcConnect := ethjsonrpc.GetConnect()
+	rpcClient := ethjsonrpc.GetConnect()
 	ginRouter := router.SetupRouter()
 	ginRouter.StaticFile("/favicon.ico", "./favicon.svg")
 	srv := &http.Server{
@@ -36,11 +37,13 @@ func main() {
 
 	quit := make(chan os.Signal, 1)
 
+	// setup indexService
+	go services.IndexService(context.Background(), rpcClient)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Println("Shutting down server ...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer rpcConnect.Close()
+	defer rpcClient.Close()
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server forced to shutdown:", err)
